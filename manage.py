@@ -5,6 +5,8 @@ import sys
 
 
 def main():
+    project_dir = "inurse"
+    sys.path.append(project_dir)
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'inurse.settings')
     try:
         from django.core.management import execute_from_command_line
