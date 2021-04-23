@@ -24,7 +24,21 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'odwpm*83_v)gr-%&6wzf)7tv-)p&p18_^=j^n*adbess(1afnw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+
+
+APP_DIR = os.path.join(BASE_DIR, 'APIapp')
+
+if DEBUG:
+    STATICFILES_DIRS = (    
+        os.path.join(APP_DIR, 'static/APIapp'),
+) 
+else:
+    STATICFILES_DIRS = (  
+        os.path.join(APP_DIR, 'static'),
+)
+
+
 
 ALLOWED_HOSTS = ['*']
 
@@ -128,6 +142,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = '/static/'
 
 AUTH_USER_MODEL = 'APIapp.User'
 

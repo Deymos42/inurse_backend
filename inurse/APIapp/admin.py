@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import Patient, Floor, Room, User, Appointment
+from .models import Patient, Floor, Room, User, Appointment, Historical
 from django.contrib.sessions.models import Session
 
 
@@ -20,3 +20,5 @@ admin.site.register(Floor)
 admin.site.register(Room)
 admin.site.register(Appointment)
 admin.site.register(Session)
+admin.site.register(User)
+admin.site.register(Historical)

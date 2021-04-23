@@ -10,8 +10,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 
 from inurse.APIapp.serializers import PatientSerializer, RoomSerializer, FloorSerializer, UserSerializer, \
-    AppointmentSerializer, LoginSerializer
-from APIapp.models import Patient, Room, Floor, User, Appointment
+    AppointmentSerializer, LoginSerializer, HistoricalSerializer
+from APIapp.models import Patient, Room, Floor, User, Appointment, Historical
 
 
 class PatientViewSet(viewsets.ModelViewSet):
@@ -22,9 +22,19 @@ class PatientViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         patients = Patient.objects.all()
         patientFloor = self.request.GET.get("floor")
+        patientName = self.request.GET.get("Name")
+        patientDni = self.request.GET.get("dni")
         
         if patientFloor:
-            patients = patients.filter(room__floor__floor_num = patientFloor)
+            patients = patients.filter(room__floor__floor_num = patientFloor)            
+            
+
+        elif patientName:
+            patients = patients.filter(first_name__contains = patientName)        
+        
+        
+        if patientDni:
+            patients = patients.filter(dni__contains = patientDni)
             
         return patients
 
@@ -37,8 +47,26 @@ class RoomViewSet(viewsets.ModelViewSet):
 
 class FloorViewSet(viewsets.ModelViewSet):
     queryset = Floor.objects.all()
-    serializer_class = FloorSerializer
+    serializer_class = FloorSerielizer
     permission_classes = [permissions.IsAuthenticated]
+
+class HistoricalViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Historical.objects.all()
+    serializer_class = HistoricalSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        historicals = Historical.objects.all()
+        patientId = self.request.GET.get("patient")
+        
+        if patientId:
+            historicals = historicals.filter(patient = patientId)
+            
+        return historicals
+
 
 
 class AppointmentViewSet(viewsets.ModelViewSet):
