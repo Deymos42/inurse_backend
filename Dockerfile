@@ -16,10 +16,10 @@ RUN chmod +x /scripts/*
 
 
 RUN mkdir /var/log/django
-RUN touch /var/log/django/APIapp.log
+RUN touch /var/log/django/myapp.log
 RUN adduser -D user
 RUN chown -R user:user /app
-RUN chmod -R 777 /var/log/django/APIapp.log
+RUN chmod -R 777 /var/log/django/myapp.log
 RUN chmod -R 755 /app/APIapp
 RUN rm -rf /app/APIapp/static/APIapp
 
