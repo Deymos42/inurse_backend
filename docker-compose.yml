@@ -1,23 +1,11 @@
-version: '3.7'
+version: '3'
 
 services:
   app:
-    build:
-      context: .   
-    network_mode: host
+    build: .
+    command: python app/manage.py runserver 0.0.0.0:8000      
     volumes: 
-      - static_data:/vol/web   
-    environment: 
-      - DEBUG=0
-   
-  proxy:
-    build: 
-      context: ./proxy
-    network_mode: host  
-    volumes: 
-      - static_data:/vol/static
-    depends_on: 
-      - app
+      - .:/app 
+    ports: 
+      - "8000:8000"
 
-volumes: 
-  static_data:

@@ -5,9 +5,9 @@ import sys
 
 
 def main():
-    project_dir = "inurse"
+    project_dir = "app"
     sys.path.append(project_dir)
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'inurse.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

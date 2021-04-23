@@ -31,63 +31,16 @@ DEBUG = bool(int(os.environ.get('DEBUG',1)))
 
 APP_DIR = os.path.join(BASE_DIR, 'APIapp')
 
-if DEBUG:
-    STATICFILES_DIRS = (    
-        os.path.join(APP_DIR, 'static/APIapp'),
-) 
-else:
-    STATICFILES_DIRS = (  
-        os.path.join(APP_DIR, 'static'),
-)
+
+ALLOWED_HOSTS = ["*"]
 
 
-
-ALLOWED_HOSTS = ['*']
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        # Include the default Django email handler for errors
-        # This is what you'd get without configuring logging at all.
-        'mail_admins': {
-            'class': 'django.utils.log.AdminEmailHandler',
-            'level': 'ERROR',
-             # But the emails are plain text by default - HTML is nicer
-            'include_html': True,
-        },
-        # Log to a text file that can be rotated by logrotate
-        'logfile': {
-            'class': 'logging.handlers.WatchedFileHandler',
-            'filename': '/var/log/django/myapp.log'
-        },
-    },
-    'loggers': {
-        # Again, default Django configuration to email unhandled exceptions
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-        # Might as well log any errors anywhere else in Django
-        'django': {
-            'handlers': ['logfile'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-        # Your own app - this assumes all your logger names start with "myapp."
-        'myapp': {
-            'handlers': ['logfile'],
-            'level': 'WARNING', # Or maybe INFO or DEBUG
-            'propagate': False
-        },
-    },
-}
 
 # Application definition
 
@@ -113,7 +66,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'inurse.urls'
+ROOT_URLCONF = 'app.urls'
 
 TEMPLATES = [
     {
@@ -131,7 +84,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'inurse.wsgi.application'
+WSGI_APPLICATION = 'app.wsgi.application'
 
 
 # Database
@@ -181,8 +134,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/static/static/'
 
-STATIC_ROOT = '/static/'
+STATIC_ROOT = '/vol/web/static/'
 
 AUTH_USER_MODEL = 'APIapp.User'
