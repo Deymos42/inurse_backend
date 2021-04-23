@@ -6,4 +6,4 @@ set -e
 #django-admin.py collectstatic
 
 
-uwsgi --socket :8000 --master --enable-threads --module printerManager.wsgi
+uwsgi --socket :8000 --master --enable-threads --module API.wsgi
