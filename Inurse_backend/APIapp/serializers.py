@@ -32,6 +32,7 @@ class HistoricalSerializer(serializers.ModelSerializer):
 class PatientSerielizer(serializers.ModelSerializer):
     room = RoomSerielizer(read_only=True)
     historical = HistoricalSerializer(read_only=True)
+    room_id = serializers.PrimaryKeyRelatedField(queryset=Room.objects.all(), source="room")
     class Meta:
         model = Patient
         fields = "__all__"
