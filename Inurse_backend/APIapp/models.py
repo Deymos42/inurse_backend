@@ -15,11 +15,18 @@ class User(AbstractUser):
 
 
 class Patient(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=25)
+    last_name = models.CharField(max_length=25)
     dni = models.CharField(max_length=15)
     age = models.IntegerField()
     room = models.ForeignKey("Room", on_delete=models.PROTECT)
+    sex = models.CharField(max_length=15)
+    height = models.CharField(max_length=15)
+    weight = models.CharField(max_length=15)
+    allergies = models.TextField()
+    actualState = models.CharField(max_length=50)
+    asignedNurse = models.ForeignKey("User", on_delete=models.PROTECT)
+    
 
     def __str__(self):
         return self.first_name + self.last_name
@@ -27,10 +34,10 @@ class Patient(models.Model):
 
 
 class Floor(models.Model):
-    floor_num = models.CharField(max_length=15)
+    floor_num = models.IntegerField()
 
     def __str__(self):
-        return self.floor_num
+        return  "Floor" + str(self.floor_num)
    
 
 class Room(models.Model):
@@ -40,3 +47,11 @@ class Room(models.Model):
     def __str__(self):
         return self.room_num
    
+class Historical(models.Model):
+    patient = models.ForeignKey("Patient", on_delete=models.PROTECT)
+    nurse = models.CharField(max_length=25)
+    created_at = models.DateTimeField(auto_now_add=True)
+    description = models.TextField()
+
+    def __str__(self):
+        return "Entry" + str(self.id)

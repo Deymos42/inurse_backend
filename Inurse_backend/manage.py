@@ -5,7 +5,7 @@ import sys
 
 
 def main():
-    project_dir = "inurse"
+    project_dir = "inurse_backend"
     sys.path.append(project_dir)
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'inurse.settings')
     try:
