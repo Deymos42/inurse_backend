@@ -26,7 +26,7 @@ SECRET_KEY = 'odwpm*83_v)gr-%&6wzf)7tv-)p&p18_^=j^n*adbess(1afnw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -130,3 +130,10 @@ STATIC_URL = '/static/'
 
 
 AUTH_USER_MODEL = 'APIapp.User'
+
+# Session settings
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_SAVE_EVERY_REQUEST = True
+
+
+LOGIN_REDIRECT_URL = '/'
