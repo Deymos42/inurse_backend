@@ -34,7 +34,7 @@ class Patient(models.Model):
     #sex = models.CharField(max_length=8, choices=SEX_CHOICES, default='---') 
     #current_status = models.CharField(max_length=32, choices=STATUS_CHOICES, default='---')
 
-    first_name = models.CharField(max_length=25)
+    first_name = models.CharField(max_length=24)
     last_name = models.CharField(max_length=25)
     dni = models.CharField(max_length=15)
     age = models.IntegerField()
@@ -57,6 +57,10 @@ class Appointment(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.PROTECT)
     treatment = models.TextField(default='')
 
+    def __str__(self):
+        return "Entry" + str(self.id)
+
+
 
 class Floor(models.Model):
     floor_num = models.IntegerField()
@@ -72,11 +76,4 @@ class Room(models.Model):
     def __str__(self):
         return self.room_num
    
-class Historical(models.Model):
-    patient = models.ForeignKey("Patient", on_delete=models.PROTECT)
-    nurse = models.CharField(max_length=25)
-    created_at = models.DateTimeField(auto_now_add=True)
-    description = models.TextField()
 
-    def __str__(self):
-        return "Entry" + str(self.id)

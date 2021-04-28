@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
-from APIapp.models import Patient, Floor, Room, Historical, User, Appointment
+from APIapp.models import Patient, Floor, Room, User, Appointment
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -25,26 +25,11 @@ class FloorSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class RoomSerielizer(serializers.ModelSerializer):
-    floor = FloorSerielizer(read_only=True)
+    floor = FloorSerializer(read_only=True)
     floor_id = serializers.PrimaryKeyRelatedField(queryset=Floor.objects.all(), source="floor")
     class Meta:
         model = Room
         fields = "__all__"
-
-class HistoricalSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Historical
-        fields = "__all__"
-
-class PatientSerielizer(serializers.ModelSerializer):
-    room = RoomSerielizer(read_only=True)
-    historical = HistoricalSerializer(read_only=True)
-    room_id = serializers.PrimaryKeyRelatedField(queryset=Room.objects.all(), source="room")
-    class Meta:
-        model = Patient
-        fields = "__all__"
-
 
 class AppointmentSerializer(serializers.ModelSerializer):
     nurse = serializers.HiddenField(
@@ -54,6 +39,15 @@ class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = "__all__"
+
+class PatientSerielizer(serializers.ModelSerializer):
+    room = RoomSerielizer(read_only=True)
+    Appointment = AppointmentSerializer(read_only=True)
+    room_id = serializers.PrimaryKeyRelatedField(queryset=Room.objects.all(), source="room")
+    class Meta:
+        model = Patient
+        fields = "__all__"
+
 
 
 class LoginSerializer(serializers.Serializer):

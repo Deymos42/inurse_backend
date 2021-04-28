@@ -1,27 +1,21 @@
 from rest_framework import viewsets
 from rest_framework import permissions
-from APIapp.serializers import PatientSerielizer, RoomSerielizer, FloorSerielizer, HistoricalSerializer
-from APIapp.models import Patient, Room, Floor, Historical
-
-''"""''
-class UserViewSet(viewsets.ModelViewSet):
-    
-    API endpoint that allows users to be viewed or edited.
-
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+from rest_framework.exceptions import MethodNotAllowed
+from rest_framework.decorators import action
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework import generics
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import redirect
 
 
-class GroupViewSet(viewsets.ModelViewSet):
-    
-    API endpoint that allows groups to be viewed or edited.
-    
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
+from rest_framework import viewsets
+from rest_framework import permissions
+from APIapp.serializers import PatientSerielizer, RoomSerielizer, FloorSerializer, AppointmentSerializer, LoginSerializer
+from APIapp.models import Patient, Room, Floor, Appointment
 
-"""
+
 class PatientViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
@@ -64,22 +58,46 @@ class FloorViewSet(viewsets.ModelViewSet):
     API endpoint that allows groups to be viewed or edited.
     """
     queryset = Floor.objects.all()
-    serializer_class = FloorSerielizer
+    serializer_class = FloorSerializer
     #permission_classes = [permissions.IsAuthenticated]
 
-class HistoricalViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Historical.objects.all()
-    serializer_class = HistoricalSerializer
-    #permission_classes = [permissions.IsAuthenticated]
+
+
+class AppointmentViewSet(viewsets.ModelViewSet):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentSerializer
 
     def get_queryset(self):
-        historicals = Historical.objects.all()
+        filtered = Appointment.objects.all()
         patientId = self.request.GET.get("patient")
         
         if patientId:
-            historicals = historicals.filter(patient = patientId)
+            filtered = filtered.filter(patient = patientId)
             
-        return historicals
+        return filtered
+
+    @action(detail=True, methods=['post'], url_path='create-appointment')
+    def create_appointment(self, request, pk=None):
+        if request.method not in ('POST'):
+            raise MethodNotAllowed(request.method, 'Method "{}" not allowed.'.format(request.method))
+    
+    
+
+
+class LoginView(generics.GenericAPIView):
+    serializer_class = LoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data
+        login(request, user)
+        if not request.user.is_superuser and not request.user.is_staff:
+            request.session.set_expiry(15*60)
+        return Response(status=status.HTTP_200_OK)
+
+
+class LogoutView(APIView):
+    def post(self, request):
+        logout(request)
+        return Response(status=status.HTTP_200_OK)
