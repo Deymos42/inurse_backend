@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    command: python Inurse_backend/manage.py runserver 0.0.0.0:55001      
+    volumes: 
+      - .:/app 
+    ports: 
+      - "55001:55001"
+
