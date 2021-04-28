@@ -22,7 +22,7 @@ class PatientViewSet(viewsets.ModelViewSet):
     """
     queryset = Patient.objects.all()
     serializer_class = PatientSerielizer
-    #permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         patients = Patient.objects.all()
@@ -49,7 +49,7 @@ class RoomViewSet(viewsets.ModelViewSet):
     """
     queryset = Room.objects.all()
     serializer_class = RoomSerielizer
-    #permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
     
 
@@ -59,7 +59,7 @@ class FloorViewSet(viewsets.ModelViewSet):
     """
     queryset = Floor.objects.all()
     serializer_class = FloorSerializer
-    #permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 
