@@ -51,7 +51,7 @@ class PatientSerielizer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    dni = serializers.CharField()
     password = serializers.CharField()
 
     def validate(self, data):
