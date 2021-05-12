@@ -92,8 +92,12 @@ class LoginView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
         login(request, user)
+
         if not request.user.is_superuser and not request.user.is_staff:
             request.session.set_expiry(15*60)
+            
+            return Response(data=request.session.session_key, status=status.HTTP_200_OK)
+            
         return Response(status=status.HTTP_200_OK)
 
 

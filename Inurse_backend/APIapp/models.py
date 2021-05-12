@@ -117,7 +117,7 @@ class Appointment(models.Model):
     def __str__(self):
         return "Entry" + str(self.id)
 
-
+ 
 
 class Floor(models.Model):
     floor_num = models.IntegerField()
