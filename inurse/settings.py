@@ -29,6 +29,12 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
@@ -46,6 +52,10 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'APIapp.apps.ApiappConfig',
+
+    # Third libraries
+    'rest_framework_jwt',
+    'rest_framework_jwt.blacklist',
 ]
 
 MIDDLEWARE = [
@@ -135,5 +145,13 @@ AUTH_USER_MODEL = 'APIapp.User'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = True
 
-
 LOGIN_REDIRECT_URL = '/'
+
+from datetime import timedelta
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': timedelta(minutes=15),
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=1),
+    'JWT_AUTH_HEADER_PREFIX': 'Token',
+    'JWT_DELETE_STALE_BLACKLISTED_TOKENS': True,
+}

@@ -10,14 +10,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 
 from inurse.APIapp.serializers import PatientSerializer, RoomSerializer, FloorSerializer, UserSerializer, \
-    AppointmentSerializer, LoginSerializer
+    AppointmentSerializer
 from APIapp.models import Patient, Room, Floor, User, Appointment
 
 
 class PatientViewSet(viewsets.ModelViewSet):
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         patients = Patient.objects.all()
@@ -32,13 +31,11 @@ class PatientViewSet(viewsets.ModelViewSet):
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
-    permission_classes = [permissions.IsAuthenticated]
     
 
 class FloorViewSet(viewsets.ModelViewSet):
     queryset = Floor.objects.all()
     serializer_class = FloorSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
 class AppointmentViewSet(viewsets.ModelViewSet):
@@ -50,21 +47,3 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         if request.method not in ('POST'):
             raise MethodNotAllowed(request.method, 'Method "{}" not allowed.'.format(request.method))
 
-
-class LoginView(generics.GenericAPIView):
-    serializer_class = LoginSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data
-        login(request, user)
-        if not request.user.is_superuser and not request.user.is_staff:
-            request.session.set_expiry(15*60)
-        return Response(status=status.HTTP_200_OK)
-
-
-class LogoutView(APIView):
-    def post(self, request):
-        logout(request)
-        return Response(status=status.HTTP_200_OK)
