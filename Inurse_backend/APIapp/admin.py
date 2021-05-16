@@ -68,9 +68,8 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('is_superuser',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Permissions', {'fields': ('is_superuser', 'user_permissions')}),
         ('Personal info', {'fields': ('groups',)}),
-      
+        ('Permissions', {'fields': ('is_superuser', 'user_permissions')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -84,10 +83,10 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('email',)
     filter_horizontal = ()
 
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Patient)
 admin.site.register(Floor)
 admin.site.register(Room)
 admin.site.register(Appointment)
 admin.site.register(Session)
-

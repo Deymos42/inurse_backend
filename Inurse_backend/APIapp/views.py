@@ -12,8 +12,8 @@ from django.shortcuts import redirect
 
 from rest_framework import viewsets
 from rest_framework import permissions
-from APIapp.serializers import PatientSerielizer, RoomSerielizer, FloorSerializer, AppointmentSerializer, LoginSerializer
-from APIapp.models import Patient, Room, Floor, Appointment
+from .serializers import PatientSerielizer, RoomSerielizer, FloorSerializer, AppointmentSerializer
+from .models import Patient, Room, Floor, Appointment
 
 
 class PatientViewSet(viewsets.ModelViewSet):
@@ -83,25 +83,3 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     
     
 
-
-class LoginView(generics.GenericAPIView):
-    serializer_class = LoginSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data
-        login(request, user)
-
-        if not request.user.is_superuser and not request.user.is_staff:
-            request.session.set_expiry(15*60)
-            
-            return Response(data=request.session.session_key, status=status.HTTP_200_OK)
-            
-        return Response(status=status.HTTP_200_OK)
-
-
-class LogoutView(APIView):
-    def post(self, request):
-        logout(request)
-        return Response(status=status.HTTP_200_OK)

@@ -59,7 +59,6 @@ class MyUserManager(BaseUserManager):
         return user
 
 
-
 class User(AbstractUser):
     """
     users: Admins or employees
@@ -86,23 +85,17 @@ class User(AbstractUser):
 
     objects = MyUserManager()
 
-class Patient(models.Model):
-   
-    #sex = models.CharField(max_length=8, choices=SEX_CHOICES, default='---') 
-    #current_status = models.CharField(max_length=32, choices=STATUS_CHOICES, default='---')
 
-    first_name = models.CharField(max_length=24)
-    last_name = models.CharField(max_length=25)
-    dni = models.CharField(max_length=15)
+class Patient(models.Model):
+    first_name = models.CharField(max_length=64)
+    last_name = models.CharField(max_length=64)
+    dni = models.CharField(max_length=16)
     age = models.IntegerField()
     room = models.ForeignKey("Room", on_delete=models.PROTECT)
-    sex = models.CharField(max_length=15)
-    height = models.CharField(max_length=15)
-    weight = models.CharField(max_length=15)
-    allergies = models.TextField()
-    actualState = models.CharField(max_length=50)
-    asignedNurse = models.ForeignKey("User", on_delete=models.PROTECT)
-    
+    sex = models.CharField(max_length=8, choices=SEX_CHOICES, default='---')
+    height = models.FloatField()
+    allergies = models.CharField(max_length=4096, default=None)
+    current_status = models.CharField(max_length=32, choices=STATUS_CHOICES, default='---')
 
     def __str__(self):
         return self.first_name + " " + self.last_name
@@ -114,16 +107,12 @@ class Appointment(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.PROTECT)
     treatment = models.TextField(default='')
 
-    def __str__(self):
-        return "Entry" + str(self.id)
-
- 
 
 class Floor(models.Model):
-    floor_num = models.IntegerField()
+    floor_num = models.CharField(max_length=16)
 
     def __str__(self):
-        return  "Floor" + str(self.floor_num)
+        return self.floor_num
    
 
 class Room(models.Model):
@@ -132,5 +121,3 @@ class Room(models.Model):
   
     def __str__(self):
         return self.room_num
-   
-
